@@ -1,0 +1,22 @@
+<% include ../partials/header.ejs %>
+    <div class="container">
+        <header class="jumbotron">
+          <h1>Welcome to iNature!</h1>
+          <p>Farming your life with inspiration!</p>
+          <p><a class="btn btn-primary btn-lg" href="/photo/new" role="button">Add a new photo</a></p>
+        </header>
+        <div class="row text-center" style="display: flex; flex-wrap: wrap">
+            <% data.forEach(function(photo){%>
+                <div class="col-md-3 col-sm-6">
+                    <div class="thumbnail">
+                          <img src="<%= photo.source%>">
+
+                        <div class = "text-right" style="margin-top: 2px">
+                          <a href="/photo/<%= photo._id %>">More Info</a>
+                        </div>
+                    </div>
+                </div>
+            <% });%>
+        </div>
+    </div>
+<% include ../partials/footer.ejs %>
