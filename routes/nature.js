@@ -3,6 +3,7 @@ var router = express.Router();
 var Nature = require("../models/nature.js");
 var middleware = require("../middleware");
 var request = require("request");
+var geocoder = require("geocoder");
 
 router.get("/photo",function(req, res){
       if(req.query.search && req.xhr) {
@@ -34,20 +35,35 @@ router.get("/photo",function(req, res){
 router.post("/photo", middleware.isLoggedIn, function(req, res){
     request(req.body.photo.source, function(error, response, jsonbody){
         if(!error && response.statusCode === 200){
-            Nature.create(req.body.photo, function(err, photo){
-                if(err || !photo){
-                    req.flash("error", "Error: Fail to create photo");
-                    console.log(err.message);
-                    res.redirect("/photo");
+            var orgLocation=req.body.photo.location;
+            geocoder.geocode(orgLocation, function(err, data){
+                if(err){
+                    console.log(err);
+                    req.flash("error", "Error: Location not found");
+                    res.redirect("/photo/new");
                 }
-                else {
-                    photo.author.id = req.user._id;
-                    photo.author.username = req.user.username;
-                    photo.save();
-                    req.flash("success", "Photo created");
-                    res.redirect("/photo");                    
+                else{
+                    req.body.photo.lat = data.results[0].geometry.location.lat;
+                    req.body.photo.lng = data.results[0].geometry.location.lng;
+                    req.body.photo.location = data.results[0].formatted_address;
+                    Nature.create(req.body.photo, function(err, photo){
+                        if(err || !photo){
+                            req.flash("error", "Error: Fail to create photo");
+                            console.log(err.message);
+                            res.redirect("/photo");
+                        }
+                        else {
+                            photo.author.id = req.user._id;
+                            photo.author.username = req.user.username;
+                            photo.save();
+                            req.flash("success", "Photo created");
+                            res.redirect("/photo");                    
+                        }
+                    });                   
                 }
-            });            
+
+            });
+                
         }
         else{
             req.flash("error", "Error: Invalid Img URL");

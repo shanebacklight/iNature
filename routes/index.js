@@ -35,7 +35,9 @@ router.get("/login", function(req, res){
 router.post("/login", passport.authenticate("local", 
     {
         successRedirect: "/photo",
-        failureRedirect: "/login"
+        failureRedirect: "/login",
+        failureFlash: true,
+        successFlash: 'Welcome to Come Back!'
     }), function(req, res){
 });
 
