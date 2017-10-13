@@ -5,14 +5,30 @@ var middleware = require("../middleware");
 var request = require("request");
 
 router.get("/photo",function(req, res){
-    Nature.find({},function(err, alldata){
-        if(err){
-            console.log(err.message);
-        }
-        else{
-            res.render("./nature/index.ejs", {data: alldata});            
-        }
-    });
+      if(req.query.search && req.xhr) {
+      const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+      // Get all campgrounds from DB
+      Nature.find({title: regex}, function(err, data){
+         if(err){
+            console.log(err);
+         } else {
+            res.status(200).json(data);
+         }
+      });
+  } else {
+      // Get all campgrounds from DB
+      Nature.find({}, function(err, data){
+         if(err){
+             console.log(err);
+         } else {
+            if(req.xhr) {
+              res.json(data);
+            } else {
+              res.render("./nature/index.ejs",{data: data});
+            }
+         }
+      });
+  }
 });
 
 router.post("/photo", middleware.isLoggedIn, function(req, res){
@@ -35,7 +51,7 @@ router.post("/photo", middleware.isLoggedIn, function(req, res){
         }
         else{
             req.flash("error", "Error: Invalid Img URL");
-            res.redirect("/photo");            
+            res.redirect("/photo/new");            
         }
     });
 });
@@ -99,5 +115,10 @@ router.delete("/photo/:id", middleware.checkNatureOwnership, function(req, res){
         }
     });
 });
+
+// Define escapeRegex function for search feature
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;

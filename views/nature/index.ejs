@@ -3,20 +3,26 @@
         <header class="jumbotron">
           <h1>Welcome to iNature!</h1>
           <p>Farming your life with inspiration!</p>
-          <p><a class="btn btn-primary btn-lg" href="/photo/new" role="button">Add a new photo</a></p>
+          <p><a class="btn btn-primary btn-md" href="/photo/new" role="button">Add a new photo</a></p>
+            <form action="/nature" method="GET" class="form-inline" id="photo-search">
+                <div class="form-group">
+                  <input type="text" name="search" placeholder="Photo search..." class="form-control">
+                </div>
+            </form>
         </header>
-        <div class="row text-center" style="display: flex; flex-wrap: wrap">
+        <div class="container-fluid row text-center" id="photo-grid">
             <% data.forEach(function(photo){%>
                 <div class="col-md-3 col-sm-6">
-                    <div class="thumbnail">
+                    <div class="thumbnail mythumbnail">
                           <img src="<%= photo.source%>">
 
-                        <div class = "text-right" style="margin-top: 2px">
-                          <a href="/photo/<%= photo._id %>">More Info</a>
+                        <div style="margin-top: 2px">
+                            <p class="pull-left" style="display: inline"><strong><%= photo.title%></strong></p>
+                            <a href="/photo/<%= photo._id %>" class="pull-right">More Info</a>
                         </div>
                     </div>
                 </div>
             <% });%>
         </div>
     </div>
-<% include ../partials/footer.ejs %>
+<% include ../partials/searchfooter.ejs %>

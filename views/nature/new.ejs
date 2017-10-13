@@ -1,21 +1,20 @@
 <% include ../partials/header.ejs %>
         <div class="container">
             <div class="row">
-                <h1 style="text-align: center">Please Add a New Photo</h1>
-
-                <div style="width: 50%; margin-left: auto; margin-right: auto;">
+                <div class="my-center">
+                    <h1 class="text-center">Please Add a New Photo</h1>
                     <form action="/photo" method="POST">
                         <div class="form-group">
-                            <input  class ="form-control" type = "text" name = photo[title] placeholder="title">
+                            <input  class ="form-control" type = "text" name = photo[title] placeholder="title" minlength="1", maxlength="20">
                         </div>
                         <div class="form-group">
                             <input class ="form-control" type = "text" name = photo[source] placeholder="image url">
                         </div>
                         <div class="form-group">
-                            <textarea class ="form-control" name = photo[description] placeholder="description" style="height:200px"></textarea>
+                            <textarea class ="form-control" name = photo[description] placeholder="description" style="height:200px" minlength="1"></textarea>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-md btn-primary btn-block">Submit</button>
+                            <button class="btn btn-lg btn-primary btn-block">Submit</button>
                         </div>
                         <a href="/photo">Go Back</a>
                     </form>

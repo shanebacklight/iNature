@@ -1,0 +1,23 @@
+/* force scrollbar */
+html { overflow-y: scroll; }
+
+
+/* ---- grid ---- */
+
+.grid {
+  background: #DDD;
+}
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .grid-item ---- */
+
+.grid-sizer,
+.grid-item {
+  width: 33.333%;
+}
