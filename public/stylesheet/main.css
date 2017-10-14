@@ -37,5 +37,6 @@ body {
 #map{
     height: 400px;
     width: 100%;
+    padding-bottom: 2px
 }
 

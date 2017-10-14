@@ -14,7 +14,11 @@
                     <li class="list-group-item"><strong>Lng:</strong> <%= photo.lng.toFixed(2)%></li>
                 <% } %>
             </div>
+            <% if(!photo.location || !photo.lat || !photo.lng){ %>
+                <div style="height: 0"></div>
+            <% } else {%>
             <div id="map"></div>
+            <% } %>
         </div>
         
         <div class="col-md-8">
