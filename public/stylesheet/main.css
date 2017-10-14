@@ -1,4 +1,23 @@
-.mythumbnail{
+body {
+    padding-top: 70px
+}
+.jumbotron {
+  color: #2c3e50;
+  background: #ecf0f1;
+
+}
+.navbar-inverse {
+  background: #2c3e50;
+  color: white;
+}
+.navbar-inverse .navbar-brand, .navbar-inverse a{
+  color:white;
+}
+.navbar-inverse .navbar-nav>li>a {
+  color: white;
+}
+
+#mythumbnail{
     border:0 solid #fff;
 }
 .thumbnail img{
@@ -18,10 +37,5 @@
 #map{
     height: 400px;
     width: 100%;
-}
-
-.list-group-item :hover{
-    background-color: #337ab7;
-        border-color: #337ab7;
 }
 

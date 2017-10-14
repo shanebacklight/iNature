@@ -1,17 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>iNature</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/stylesheet/main.css">
+	<link rel="stylesheet" href="/stylesheet/component.css">
+	<meta name="description" content="Online photography community developed by node.js, express, mongodb, Javascript and Ajax" />
+	<meta name="keywords" content="fuzzySearch authentication authorization googleMapAPI" />
+	<meta name="author" content="Xuanyi (Shane) Li" />
+	<script src="script/modernizr.custom.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/photo">iNature</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">iNature</a>
             </div>
-            <div class="collapse navbar-collapse">
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                  <li class="<%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>"><a href="/photo">Home</a></li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <% if(!currentUser){ %>
                         <li><a href="/login">Login</a></li>

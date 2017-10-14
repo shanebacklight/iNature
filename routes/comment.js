@@ -9,7 +9,7 @@ router.get("/photo/:id/comment/new", middleware.isLoggedIn, function(req, res){
     Nature.findById(req.params.id, function(err, photo){
         if(err || !photo){
             req.flash("error", "Error: Photo not found");
-            console.log(err.message);
+            console.log(err);
             res.redirect("/photo");
         }
         else{
@@ -22,14 +22,14 @@ router.post("/photo/:id/comment", middleware.isLoggedIn, function(req, res){
     Nature.findById(req.params.id, function(err, photo){
         if(err || !photo){
             req.flash("error", "Error: Photo not found");
-            console.log(err.message);
+            console.log(err);
             res.redirect("/photo");
         }
         else{
             Comment.create(req.body.comment, function(err, comment){
                 if(err){
                     req.flash("error", "Error: Fail to create comment");
-                    console.log(err.message);
+                    console.log(err);
                 }
                 else{
                     comment.author.id = req.user._id;
@@ -49,14 +49,14 @@ router.get("/photo/:id/comment/:comment_id/edit", middleware.checkCommentOwnersh
     Nature.findById(req.params.id, function(err, photo){
         if(err || !photo){
             req.flash("error", "Error: Photo not found");
-            console.log(err.message);
+            console.log(err);
             res.redirect("/photo");
         }
         else{
             Comment.findById(req.params.comment_id, function(err, comment){
                 if(err || !comment){
                     req.flash("error", "Error: Comment not found");
-                    console.log(err.message);
+                    console.log(err);
                     res.redirect("/photo");
                 }
                 else{
@@ -71,14 +71,14 @@ router.put("/photo/:id/comment/:comment_id", middleware.checkCommentOwnership, f
     Nature.findById(req.params.id, function(err, nature){
         if(err || !nature){
             req.flash("error", "Error: Photo not found");
-            console.log(err.message);
+            console.log(err);
             res.redirect("/photo");
         }
         else{
             Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, comment){
                 if(err || !comment){
                     req.flash("error", "Error: Fail to update comment");
-                    console.log(err.message);
+                    console.log(err);
                     res.redirect("/photo");
                 }
                 else{
@@ -94,14 +94,14 @@ router.delete("/photo/:id/comment/:comment_id", middleware.checkCommentOwnership
     Nature.findById(req.params.id, function(err, nature){
         if(err || !nature){
             req.flash("error", "Error: Photo not found");
-            console.log(err.message);
+            console.log(err);
             res.redirect("/photo");
         }
         else{
             Comment.findByIdAndRemove(req.params.comment_id, function(err){
                 if(err){
                     req.flash("error", "Error: Fail to remove comment");
-                    console.log(err.message);
+                    console.log(err);
                     res.redirect("/photo");
                 }
                 else{

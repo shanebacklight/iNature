@@ -25,7 +25,7 @@ router.get("/photo",function(req, res){
             if(req.xhr) {
               res.json(data);
             } else {
-              res.render("./nature/index.ejs",{data: data});
+              res.render("./nature/index.ejs",{data: data, page:"home"});
             }
          }
       });
@@ -37,9 +37,8 @@ router.post("/photo", middleware.isLoggedIn, function(req, res){
         if(!error && response.statusCode === 200){
             var orgLocation=req.body.photo.location;
             geocoder.geocode(orgLocation, function(err, data){
-                console.log(data);
                 if(err || !data || data.status !== "OK"){
-                    console.log(err.message);
+                    console.log(err);
                     req.flash("error", "Error: Location not found");
                     res.redirect("/photo/new");
                 }
@@ -50,7 +49,7 @@ router.post("/photo", middleware.isLoggedIn, function(req, res){
                     Nature.create(req.body.photo, function(err, photo){
                         if(err || !photo){
                             req.flash("error", "Error: Fail to create photo");
-                            console.log(err.message);
+                            console.log(err);
                             res.redirect("/photo");
                         }
                         else {
@@ -81,7 +80,7 @@ router.get("/photo/:id", function(req,res){
     Nature.findById(req.params.id).populate("comments").exec(function(err, photo){
         if(err || !photo){
             req.flash("error", "Error: Photo not found");
-            console.log(err.message);
+            console.log(err);
             res.redirect("/photo");
         }
         else{
@@ -94,7 +93,7 @@ router.get("/photo/:id/edit", middleware.checkNatureOwnership, function(req, res
     Nature.findById(req.params.id, function(err, photo){
         if(err || !photo){
             req.flash("error", "Error: Photo not found");
-            console.log(err.message);
+            console.log(err);
             res.redirect("/photo");
         }
         else{
@@ -111,9 +110,9 @@ router.put("/photo/:id", middleware.checkNatureOwnership, function(req, res){
             var orgLocation=req.body.photo.location;
             geocoder.geocode(orgLocation, function(err, data){
                 if(err || !data || data.status !== "OK"){
-                    console.log(err.message);
+                    console.log(err);
                     req.flash("error", "Error: Location not found");
-                    res.redirect("/photo"+req.params.id);
+                    res.redirect("/photo/"+req.params.id);
                 }
                 else{
                     req.body.photo.lat = data.results[0].geometry.location.lat;
@@ -122,7 +121,7 @@ router.put("/photo/:id", middleware.checkNatureOwnership, function(req, res){
                     Nature.findByIdAndUpdate(req.params.id, req.body.photo, function(err, photo){
                         if(err || !photo){
                             req.flash("error", "Error: Fail to update photo");
-                            console.log(err.message);
+                            console.log(err);
                             res.redirect("/photo");
                         }
                         else {
@@ -146,7 +145,7 @@ router.delete("/photo/:id", middleware.checkNatureOwnership, function(req, res){
     Nature.findByIdAndRemove(req.params.id, function(err){
         if(err){
             req.flash("error", "Error: Fail to remove photo");
-            console.log(err.message);
+            console.log(err);
             res.redirect("/photo");
         }
         else{

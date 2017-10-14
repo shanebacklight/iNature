@@ -12,6 +12,7 @@ var express     = require("express"),
     User        = require("./models/user.js");
     
 //Config
+app.locals.moment=require("moment");
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOver("_method"));
