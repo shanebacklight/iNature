@@ -45,6 +45,7 @@ router.post("/photo", middleware.isLoggedIn, function(req, res){
                     req.body.photo.lat = data.results[0].geometry.location.lat;
                     req.body.photo.lng = data.results[0].geometry.location.lng;
                     req.body.photo.location = data.results[0].formatted_address;
+                    locationFound=true;
                 }
                 Nature.create(req.body.photo, function(errr, photo){
                     if(errr || !photo){
