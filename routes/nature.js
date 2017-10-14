@@ -36,31 +36,36 @@ router.post("/photo", middleware.isLoggedIn, function(req, res){
     request(req.body.photo.source, function(error, response, jsonbody){
         if(!error && response.statusCode === 200){
             var orgLocation=req.body.photo.location;
+            var locationFound=false;
             geocoder.geocode(orgLocation, function(err, data){
                 if(err || !data || data.status !== "OK"){
                     console.log(err);
-                    req.flash("error", "Error: Location not found");
-                    res.redirect("/photo/new");
                 }
                 else{
                     req.body.photo.lat = data.results[0].geometry.location.lat;
                     req.body.photo.lng = data.results[0].geometry.location.lng;
                     req.body.photo.location = data.results[0].formatted_address;
-                    Nature.create(req.body.photo, function(err, photo){
-                        if(err || !photo){
-                            req.flash("error", "Error: Fail to create photo");
-                            console.log(err);
-                            res.redirect("/photo");
-                        }
-                        else {
-                            photo.author.id = req.user._id;
-                            photo.author.username = req.user.username;
-                            photo.save();
-                            req.flash("success", "Photo created");
-                            res.redirect("/photo");                    
-                        }
-                    });                   
                 }
+                Nature.create(req.body.photo, function(errr, photo){
+                    if(errr || !photo){
+                        req.flash("error", "Error: Fail to create photo");
+                        console.log(err);
+                        res.redirect("/photo");
+                    }
+                    else {
+                        photo.author.id = req.user._id;
+                        photo.author.username = req.user.username;
+                        photo.save();
+                        if(!locationFound){
+                            req.flash("warning", "Warning: Location not found");
+                            res.redirect("/photo");                              
+                        }
+                        else{
+                            req.flash("success", "Photo created");
+                            res.redirect("/photo");                                     
+                        }
+                    }
+                });                   
 
             });
                 
@@ -108,28 +113,32 @@ router.put("/photo/:id", middleware.checkNatureOwnership, function(req, res){
     request(req.body.photo.source, function(error, response, jsonbody){
         if(!error && response.statusCode === 200){
             var orgLocation=req.body.photo.location;
+            var locationFound = false;
             geocoder.geocode(orgLocation, function(err, data){
                 if(err || !data || data.status !== "OK"){
                     console.log(err);
-                    req.flash("error", "Error: Location not found");
-                    res.redirect("/photo/"+req.params.id);
                 }
                 else{
                     req.body.photo.lat = data.results[0].geometry.location.lat;
                     req.body.photo.lng = data.results[0].geometry.location.lng;
                     req.body.photo.location = data.results[0].formatted_address;
-                    Nature.findByIdAndUpdate(req.params.id, req.body.photo, function(err, photo){
-                        if(err || !photo){
-                            req.flash("error", "Error: Fail to update photo");
-                            console.log(err);
-                            res.redirect("/photo");
-                        }
-                        else {
-                            req.flash("success", "Photo updated");
-                            res.redirect("/photo/"+req.params.id);                    
-                        }
-                    });                   
+                    locationFound = true;
                 }
+                Nature.findByIdAndUpdate(req.params.id, req.body.photo, function(err, photo){
+                    if(err || !photo){
+                        req.flash("error", "Error: Fail to update photo");
+                        console.log(err);
+                        res.redirect("/photo");
+                    }
+                    else if(!locationFound){
+                        req.flash("warning", "Warning: Location not found");
+                        res.redirect("/photo/"+req.params.id);
+                    }
+                    else{
+                        req.flash("success", "Photo updated");
+                        res.redirect("/photo/"+req.params.id);                        
+                    }
+                });                         
 
             });
                 
