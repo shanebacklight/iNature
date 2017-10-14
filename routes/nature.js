@@ -37,8 +37,9 @@ router.post("/photo", middleware.isLoggedIn, function(req, res){
         if(!error && response.statusCode === 200){
             var orgLocation=req.body.photo.location;
             geocoder.geocode(orgLocation, function(err, data){
-                if(err){
-                    console.log(err);
+                console.log(data);
+                if(err || !data || data.status !== "OK"){
+                    console.log(err.message);
                     req.flash("error", "Error: Location not found");
                     res.redirect("/photo/new");
                 }
@@ -105,15 +106,38 @@ router.get("/photo/:id/edit", middleware.checkNatureOwnership, function(req, res
 
 
 router.put("/photo/:id", middleware.checkNatureOwnership, function(req, res){
-    Nature.findByIdAndUpdate(req.params.id, req.body.photo, function(err, photo){
-        if(err || !photo){
-            req.flash("error", "Error: Fail to update photo");
-            console.log(err.message);
-            res.redirect("/photo");
+    request(req.body.photo.source, function(error, response, jsonbody){
+        if(!error && response.statusCode === 200){
+            var orgLocation=req.body.photo.location;
+            geocoder.geocode(orgLocation, function(err, data){
+                if(err || !data || data.status !== "OK"){
+                    console.log(err.message);
+                    req.flash("error", "Error: Location not found");
+                    res.redirect("/photo"+req.params.id);
+                }
+                else{
+                    req.body.photo.lat = data.results[0].geometry.location.lat;
+                    req.body.photo.lng = data.results[0].geometry.location.lng;
+                    req.body.photo.location = data.results[0].formatted_address;
+                    Nature.findByIdAndUpdate(req.params.id, req.body.photo, function(err, photo){
+                        if(err || !photo){
+                            req.flash("error", "Error: Fail to update photo");
+                            console.log(err.message);
+                            res.redirect("/photo");
+                        }
+                        else {
+                            req.flash("success", "Photo updated");
+                            res.redirect("/photo/"+req.params.id);                    
+                        }
+                    });                   
+                }
+
+            });
+                
         }
         else{
-            req.flash("success", "Photo updated");
-            res.redirect("/photo/"+req.params.id); 
+            req.flash("error", "Error: Invalid Img URL");
+            res.redirect("/photo/"+req.params.id);            
         }
     });
 });
