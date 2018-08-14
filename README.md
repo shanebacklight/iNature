@@ -6,6 +6,7 @@
 - Utilized Ajax to realize responsive fuzzy search for photos.
 - Implemented the feature of image upload with multer and cloudinary.
 - Maintained a serve-side MongoDB database to ensure consistency.
-
-![Home Page Screenshot](https://i.imgur.com/hcZkK2N.png)
+<div align=center>
+  <img width="60%" src="https://i.imgur.com/hcZkK2N.png"/>
+</div>
 
