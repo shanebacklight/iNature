@@ -7,6 +7,6 @@
 - Implemented the feature of image upload with multer and cloudinary.
 - Maintained a serve-side MongoDB database to ensure consistency.
 <div align=center>
-  <img width="60%" src="https://i.imgur.com/hcZkK2N.png"/>
+  <img width="80%" src="https://i.imgur.com/OgG14UL.png"/>
 </div>
 
