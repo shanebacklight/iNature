@@ -1,4 +1,4 @@
-# Photo Sharing Website
+# Photo Sharing Web APP
 - Deployed on Heroku Cloud: https://fathomless-dusk-39889.herokuapp.com
 - Developed front-end with JavaScript & Bootstrap and built back-end with Node.js & Express.js: show, add, delete and edit photos coupled with comments.
 - Plugged in Passport.js to ensure correct authorization: users are empowered with creation operation only after login and are permitted to edit and delete their own photos and comments.
